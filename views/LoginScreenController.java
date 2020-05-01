@@ -12,9 +12,14 @@ import c195appointmentschedule.DAO.UserDaoImpl;
 import static c195appointmentschedule.alerts.AppointmentTimeAlerts.apptSoon;
 import c195appointmentschedule.model.Appointment;
 import c195appointmentschedule.model.User;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -58,20 +63,42 @@ public class LoginScreenController implements Initializable{
     private boolean match = false; 
     private ResourceBundle bundle;
     
+    private void verifyLogin(String loginUser, String loginPw){
+        users.forEach(u->{
+///////lambda to search through user list to find a match
+            if(u.getUserName().equals(loginUser)&&u.getPassword().equals(loginPw)){
+                match= true;
+                UserDaoImpl userDao = UserDaoImpl.getUserDaoImpl();
+                userDao.setCurrentUser(u);
+                
+            }
+        });
+    }
+    private void checkUpcommingAppointments(){
+            AppointmentDaoImpl apptDao = AppointmentDaoImpl.getAppointmentDaoImpl();
+            ObservableList<Appointment> appts = apptDao.getUserAppointments();
+            LocalDateTime timeNow = LocalDateTime.now();
+            LocalDateTime timeSoon = timeNow.plusMinutes(15);
+            ObservableList<Appointment> apptFuture = FXCollections.observableArrayList();
+// lambda is a clear and easy way to loop through list
+// adds each appointment that has not passed to list
+            appts.forEach(appt-> {
+                if(appt.getEnd().isAfter(timeNow))
+                    apptFuture.add(appt);
+                });
+// if there are any appointments in the list it is passed to a function to find appointments starting within 15 minutes            
+            if(apptFuture.isEmpty()==false){
+                apptSoon(apptFuture);
+            }
+    }
     @FXML
     private void toMain() throws IOException{
     // login info check  
         String loginUser = fdUser.getText().trim();
         String loginPw = fdPw.getText().trim();
-        users.forEach(u->{
-            //lambda to search through user list to find a match
-            if(u.getUserName().equals(loginUser)&&u.getPassword().equals(loginPw)){
-                match= true;
-                UserDaoImpl userDao = UserDaoImpl.getUserDaoImpl();
-                userDao.setCurrentUser(u);
-            }
-        });
+        verifyLogin(loginUser,loginPw);
         if(match){
+            logLogin(loginUser);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("main screen v2.fxml"));
             Stage stage = (Stage) btnLogin.getScene().getWindow();  
             Parent root = loader.load();       
@@ -80,18 +107,23 @@ public class LoginScreenController implements Initializable{
             stage.show();
 //            CustomerDaoImpl custDao = CustomerDaoImpl.getCustomerDaoImpl();
 //            custDao.getAllCustomers();
+/*
             AppointmentDaoImpl apptDao = AppointmentDaoImpl.getAppointmentDaoImpl();
             ObservableList<Appointment> appts = apptDao.getUserAppointments();
             LocalDateTime timeNow = LocalDateTime.now();
             LocalDateTime timeSoon = timeNow.plusMinutes(15);
             ObservableList<Appointment> apptFuture = FXCollections.observableArrayList();
+// lambda is a clear and easy way to loop through list
+// adds each appointment that has not passed to list
             appts.forEach(appt-> {
                 if(appt.getEnd().isAfter(timeNow))
                     apptFuture.add(appt);
                 });
+// if there are any appointments in the list it is passed to a function to find appointments starting within 15 minutes            
             if(apptFuture.isEmpty()==false){
                 apptSoon(apptFuture);
-            }
+            }*/
+            checkUpcommingAppointments();
         } else {            
 ///////////////// add error popup with localization
               //  ResourceBundle bundle = ResourceBundle.getBundle("c195appointmentschedule/views/LoginScreen", Locale.GERMAN);
@@ -142,4 +174,15 @@ public class LoginScreenController implements Initializable{
     public void setUsers(ObservableList<User> u){
         this.users=u;
     }
+    public void logLogin(String userName){
+        String logFile = "logins.txt";
+// try with for auto close        
+        try(FileWriter outputFile = new FileWriter(logFile, true)){
+            outputFile.append(userName +" logged in on " + LocalDate.now() + " at " + LocalTime.now() + "\n");
+        } catch (IOException e){
+            e.printStackTrace();
+        }       
+        
+    }
+            
 }

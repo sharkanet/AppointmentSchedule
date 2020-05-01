@@ -62,7 +62,7 @@ public class AppointmentTimeAlerts {
         LocalDateTime timeSoon = timeNow.plusMinutes(15);
         
 /*
-        // trying out lambdas
+        // trying out lambdas/// wip
         Predicate soon = ((Appointment appointment) -> {
             return appointment.getStart().isBefore(timeSoon);});
         ObservableList<Appointment> soonAppointment = appts.filtered(soon);
@@ -75,8 +75,8 @@ public class AppointmentTimeAlerts {
             }
         }
        // System.out.println(sb.toString());
-    //lambda to add each appointment to stringbuilder    
-      // implement  
+     
+     
         if(sb.toString().equals("")){
             
         }else{
