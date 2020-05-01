@@ -142,6 +142,7 @@ public class MainScreenV2Controller implements Initializable {
             alert.setHeaderText("Deleting Customer " + selected.getCustomerName() + " and all associated appointments!");
             alert.showAndWait()
 // lambda to determine when ok button pressed so action can be taken
+// lambdas here make the code cleaner and easier to read
                     .filter(res-> res == ButtonType.OK)
 // lambda to set the action that is taken when button pressed
                     .ifPresent( res-> {
@@ -279,12 +280,12 @@ public class MainScreenV2Controller implements Initializable {
     }
     @FXML
     private void handleReport2(){
+        System.out.println("btn");
         
-        AppointmentDaoImpl.getAppointmentDaoImpl().readAppointmentsGroupByUser();
     }
     @FXML
     private void handleReport3(){
-        System.out.println("btn");
+        AppointmentDaoImpl.getAppointmentDaoImpl().readAppointmentsGroupByUser();
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
