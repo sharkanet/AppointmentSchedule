@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@project.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="c195appointmentschedule.views.ModifyAppointmentController">
+   <children>
+      <VBox layoutX="40.0" layoutY="120.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" stylesheets="@project.css">
+         <children>
+            <GridPane prefHeight="550.0" prefWidth="600.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="288.0" minWidth="10.0" prefWidth="251.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="514.0" minWidth="10.0" prefWidth="319.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="50.0" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label text="Customer" GridPane.rowIndex="1" />
+                  <Label text="User" GridPane.rowIndex="2" />
+                  <Label text="Title" GridPane.rowIndex="3" />
+                  <Label text="Description" GridPane.rowIndex="4" />
+                  <Label text="Location" GridPane.rowIndex="5" />
+                  <Label text="Contact" GridPane.rowIndex="6" />
+                  <Label text="Type" GridPane.rowIndex="7" />
+                  <TextField fx:id="fdUserId" disable="true" editable="false" prefHeight="25.0" prefWidth="312.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="fdTitle" prefHeight="25.0" prefWidth="312.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="fdDesc" prefHeight="25.0" prefWidth="312.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="fdLoc" prefHeight="25.0" prefWidth="312.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <TextField fx:id="fdContact" prefHeight="25.0" prefWidth="312.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <TextField fx:id="fdType" prefHeight="25.0" prefWidth="312.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <Label text="ID" />
+                  <TextField fx:id="fdId" disable="true" editable="false" prefHeight="25.0" prefWidth="312.0" text="Auto Generated - Disabled" GridPane.columnIndex="1" />
+                  <Label text="URL" GridPane.rowIndex="8" />
+                  <TextField fx:id="fdUrl" prefHeight="25.0" prefWidth="312.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                  <TextField fx:id="fdStart" prefHeight="25.0" prefWidth="312.0" style="visible: false;" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                  <TextField fx:id="fdEnd" prefHeight="25.0" prefWidth="312.0" style="visibile: false;" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                  <ComboBox fx:id="cbox" prefHeight="25.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               </children>
+               <padding>
+                  <Insets left="50.0" right="25.0" />
+               </padding>
+            </GridPane>
+         </children>
+      </VBox>
+      <Label id="label0" alignment="CENTER" layoutY="14.0" prefHeight="90.0" prefWidth="1280.0" text="Modify Appointment" />
+      <AnchorPane layoutX="646.0" layoutY="496.0" prefHeight="60.0" prefWidth="600.0">
+         <children>
+            <Button fx:id="btnConfirm" layoutX="300.0" layoutY="19.0" mnemonicParsing="false" onAction="#handleConfirm" style="-fx-pref-width: 150;" text="Confirm" />
+            <Button fx:id="btnCancel" layoutX="472.0" layoutY="19.0" mnemonicParsing="false" onAction="#handleCancel" style="-fx-pref-width: 100;" text="Cancel" />
+         </children>
+      </AnchorPane>
+      <Label layoutX="703.0" layoutY="192.0" text="Start" />
+      <Label layoutX="782.0" layoutY="192.0" text="Hour" />
+      <Label layoutX="1010.0" layoutY="192.0" text="Minute" />
+      <ComboBox fx:id="cbStartHr" layoutX="834.0" layoutY="192.0" prefWidth="150.0" />
+      <ComboBox fx:id="cbStartMin" layoutX="1072.0" layoutY="192.0" prefWidth="150.0" />
+      <DatePicker fx:id="datePicker" layoutX="834.0" layoutY="135.0" />
+      <Label layoutX="707.0" layoutY="269.0" text="End" />
+      <Label layoutX="782.0" layoutY="269.0" text="Hour" />
+      <Label layoutX="1010.0" layoutY="269.0" text="Minute" />
+      <ComboBox fx:id="cbEndHr" layoutX="834.0" layoutY="269.0" prefWidth="150.0" />
+      <ComboBox fx:id="cbEndMin" layoutX="1072.0" layoutY="269.0" prefWidth="150.0" />
+      <Label layoutX="787.0" layoutY="135.0" text="Day" />
+   </children>
+</AnchorPane>
