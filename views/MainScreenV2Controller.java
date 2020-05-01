@@ -8,10 +8,12 @@ package c195appointmentschedule.views;
 import c195appointmentschedule.DAO.AppointmentDaoImpl;
 import c195appointmentschedule.DAO.CustomerDaoImpl;
 import c195appointmentschedule.DAO.UserDaoImpl;
+import static c195appointmentschedule.alerts.OtherAlerts.nothingSelected;
 import c195appointmentschedule.alerts.SQLAlerts;
 import c195appointmentschedule.model.Address;
 import c195appointmentschedule.model.Appointment;
 import c195appointmentschedule.model.Customer;
+import c195appointmentschedule.model.User;
 import java.io.IOException;
 import java.net.URL;
 import java.time.DayOfWeek;
@@ -21,6 +23,7 @@ import java.time.Month;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -32,12 +35,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * FXML Controller class
@@ -81,6 +87,11 @@ public class MainScreenV2Controller implements Initializable {
     private RadioButton btnMonth;
     @FXML
     private Label lblTitle;
+    @FXML
+    private ComboBox<String> cbReports;
+    private ObservableList<String> reportOptions= FXCollections.observableArrayList();
+    
+    
     
     private ObservableList<Appointment> allUserAppts;
     ObservableList<Appointment> weekAppts = FXCollections.observableArrayList();
@@ -105,7 +116,9 @@ public class MainScreenV2Controller implements Initializable {
     private void handleBtnModCust()throws IOException{        
    
         if(tblCust.getSelectionModel().getSelectedItem()==null){
-            System.out.println("error message: nothing selected");
+            //do nothing
+            //System.out.println("nothing selected");
+            nothingSelected();
         } else {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("modify customer.fxml"));
            Parent root = loader.load(); 
@@ -123,7 +136,9 @@ public class MainScreenV2Controller implements Initializable {
     @FXML
     private void handleBtnDelCust(){
         if(tblCust.getSelectionModel().getSelectedItem()==null){
-            System.out.println("nothing selected");
+            //do nothing
+            //System.out.println("nothing selected");
+            nothingSelected();
         } else{
 //            Customer selected = tblCust.getSelectionModel().getSelectedItem();
 //            Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -164,7 +179,9 @@ public class MainScreenV2Controller implements Initializable {
     @FXML
     private void handleBtnModAppt()throws IOException{      
         if(tblAppt.getSelectionModel().getSelectedItem()==null){
-            System.out.println("nothing selected");
+            //do nothing
+            //System.out.println("nothing selected");
+            nothingSelected();
         } else{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("modify appointment.fxml"));
             Stage stage = (Stage) btnAddCust.getScene().getWindow();  
@@ -179,7 +196,9 @@ public class MainScreenV2Controller implements Initializable {
     @FXML
     private void handleBtnDelAppt(){
          if(tblAppt.getSelectionModel().getSelectedItem()==null){
-            System.out.println("nothing selected");
+             //do nothing
+            //System.out.println("nothing selected");
+            nothingSelected();
         } else{
              Appointment selected = tblAppt.getSelectionModel().getSelectedItem();             
              Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -310,6 +329,70 @@ public class MainScreenV2Controller implements Initializable {
         rbSelected = rbOption.ALL;
         btnAll.setSelected(true);
         
+        
+        reportOptions.add("Appointment Types per Month");
+        reportOptions.add("Consultant Schedules");
+        reportOptions.add("Number of Appointments per User");
+        cbReports.setItems(reportOptions);
+        
     }    
+    @FXML 
+    private void handleBtnReport(){
+        if(cbReports.getSelectionModel().getSelectedItem() == null){
+            //do nothing
+            //System.out.println("nothing selected");
+            nothingSelected();
+        }else{
+        String selectedReport = cbReports.getSelectionModel().getSelectedItem();
+        switch(selectedReport){
+            case "Appointment Types per Month":
+              //  System.out.println("implement choice 1");
+                AppointmentDaoImpl.getAppointmentDaoImpl().appointmentTypesByMonth();
+                break;
+            case "Consultant Schedules":
+            //    System.out.println("implement choice 2");
+                reportAllUserSchedules();
+                break;
+            case "Number of Appointments per User":
+                AppointmentDaoImpl.getAppointmentDaoImpl().readAppointmentsGroupByUser();
+                break;
+        }
+        }
+        
+    }
+    private void reportAllUserSchedules(){
+        ObservableList<User> users = UserDaoImpl.getUserDaoImpl().getAllUsers();
+                ChoiceDialog<User> dialog = new ChoiceDialog<>(UserDaoImpl.getUserDaoImpl().getCurrentUser(),users);
+                dialog.setTitle("Choose User");
+                dialog.setHeaderText("Choose user to display full schedule.");
+                dialog.setContentText("User: ");
+                
+                //lambda to open report depending on choice
+                dialog.showAndWait().ifPresent( u -> {
+                    AppointmentDaoImpl.getAppointmentDaoImpl().readTargetUserAppointmentReport(u);
+//                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                    alert.initStyle(StageStyle.UTILITY);
+//                    alert.setTitle("REPORT");
+//                    alert.setHeaderText("Appointments for user: " + u);
+//                    alert.setContentText("implement");        
+//                    alert.showAndWait();
+                });
+    }
+    @FXML
+    private void handleBtnExit(){
+         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(("EXIT"));
+        alert.setHeaderText(("Exit_program"));
+        alert.setContentText(("Are_you_sure?"));       
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText(("OK"));
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL)).setText(("Cancel"));
+
+
+        Optional<ButtonType> result= alert.showAndWait();
+        if(result.get()== ButtonType.OK){
+            Platform.exit();
+        } else { 
+        }
+    }
     
 }

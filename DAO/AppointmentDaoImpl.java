@@ -15,6 +15,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.Year;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Map;
@@ -284,5 +286,73 @@ public class AppointmentDaoImpl {
         return false;
     }
     
+    public boolean appointmentTypesByMonth(){
+       // String query = "SELECT COUNT(appointmentId), type, month(start) FROM appointment WHERE year(start) = ? GROUP BY month(start), type ORDER BY month(start)";
+        String query = "SELECT COUNT(appointmentId), type, month(start), year(start) FROM appointment GROUP BY month(start),year(start), type ORDER BY year(start),month(start)";
+        try{
+            PreparedStatement ps = DBQuery.getPS(query);
+            ResultSet rs = ps.executeQuery();
+//            int year = Year.now().getValue();
+//            ps.setInt(1, year);
+            StringBuilder sb = new StringBuilder();
+            while(rs.next()){
+                sb.append(rs.getInt("COUNT(appointmentId)")).append(" appointment(s) of type ").append(rs.getString("type")).append(" in the month of ").append(Month.of(rs.getInt("month(start)"))).append(", ").append(rs.getInt("year(start)")).append(System.getProperty("line.separator"));
+                
+            }
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.initStyle(StageStyle.UTILITY);
+            alert.setTitle("REPORT");
+            alert.setHeaderText("Appointments by Type per Month (including all users)");
+            alert.setContentText(sb.toString());        
+            alert.showAndWait();
+            return true;
+        } catch(SQLException e){
+             SQLAlerts.sqlReadError(query);
+        }
+        return false;
+    }
+    
+    
+    public void readTargetUserAppointmentReport(User user){
+        String query = "SELECT * FROM appointment WHERE userId=? ORDER BY start";        
+        try{
+            DBQuery.setPStatement(query);
+            PreparedStatement ps = DBQuery.getPStatement();
+            ps.setInt(1, user.getUserID());
+            ResultSet rs;
+            rs = ps.executeQuery();
+            StringBuilder sb = new StringBuilder();
+            while(rs.next()){
+                appointmentID=rs.getInt("appointmentId");
+                customerID = rs.getInt("customerId");
+                userID = rs.getInt("userId");
+                title= rs.getString("title");
+                description = rs.getString("description");
+                location = rs.getString("location");
+                contact = rs.getString("contact");
+                type = rs.getString("type");
+                url = rs.getString("url");
+                start = rs.getTimestamp("start").toLocalDateTime().atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
+                end = rs.getTimestamp("end").toLocalDateTime().atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
+                createDate = rs.getTimestamp("createDate").toLocalDateTime().atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.systemDefault());
+                createdBy = rs.getString("createdBy");
+                lastUpdate = rs.getTimestamp("lastUpdate").toLocalDateTime().atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.systemDefault());
+                lastUpdateBy = rs.getString("lastUpdateBy");
+                Appointment newAppt = new Appointment(appointmentID,customerID, userID,title,description,location,contact,type,url,start,end,createDate,createdBy,lastUpdate,lastUpdateBy);
+                sb.append(newAppt).append(System.getProperty("line.separator"));
+            }  
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.initStyle(StageStyle.UTILITY);
+                    alert.setTitle("REPORT");
+                    alert.setHeaderText("Appointments for user: " + user);
+                    alert.setContentText(sb.toString());        
+                    alert.showAndWait();
+            
+        } catch(SQLException e){
+            e.printStackTrace();
+        }   
+         
+                           
+    }
     
 }

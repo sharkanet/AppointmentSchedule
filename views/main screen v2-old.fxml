@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ToggleGroup?>
+
+
+<BorderPane prefHeight="720.0" prefWidth="1280.0" stylesheets="@project.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="c195appointmentschedule.views.MainScreenV2Controller">
+   <left>
+      <BorderPane prefHeight="528.0" prefWidth="550.0" style="-fx-border-color: black;" BorderPane.alignment="CENTER">
+         <top>
+            <Label id="label1" alignment="TOP_CENTER" prefHeight="65.0" text="Customers" BorderPane.alignment="TOP_CENTER" />
+         </top>
+         <center>
+            <TableView prefHeight="361.0" prefWidth="585.0" BorderPane.alignment="CENTER" fx:id="tblCust" >
+              <columns>
+                <TableColumn prefWidth="41.0" text="ID" fx:id="tblCustId" />
+                <TableColumn prefWidth="153.0" text="Name" fx:id="tblCustName" />
+                  <TableColumn prefWidth="292.0" text="Address" fx:id="tblCustAddress" />
+                  <TableColumn prefWidth="60.0" text="Active"  fx:id="tblCustActive" visible="true" />
+              </columns>
+            </TableView>
+         </center>
+         <bottom>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button id="button1" mnemonicParsing="false" text="Add" fx:id="btnAddCust" onAction="#handleBtnAddCust"/>
+                  <Button id="button1" mnemonicParsing="false" text="Modify" fx:id="btnModCust" onAction="#handleBtnModCust" />
+                  <Button id="button1" mnemonicParsing="false" text="Delete" fx:id="btnDelCust" onAction="#handleBtnDelCust"/>
+               </children>
+            </HBox>
+         </bottom>
+      </BorderPane>
+   </left>
+   <center>
+      <BorderPane prefHeight="420.0" prefWidth="640.0" style="-fx-border-color: black;" BorderPane.alignment="CENTER">
+         <center>
+            <TableView prefHeight="361.0" prefWidth="682.0" BorderPane.alignment="CENTER" fx:id="tblAppt" >
+              <columns>
+                <TableColumn prefWidth="45.0" text="ID" fx:id="tblApptId" />
+                <TableColumn prefWidth="165.0" text="Customer" fx:id="tblApptCust" />
+                  <TableColumn prefWidth="90.0" text="Title" fx:id="tblApptTitle" />
+                  <TableColumn prefWidth="95.0" text="Type" fx:id="tblApptType" />
+                  <TableColumn prefWidth="160.0" text="Start Time" fx:id="tblApptStart" />
+                  <TableColumn prefWidth="170.0" text="Location" fx:id="tblApptLoc" />
+                  
+              </columns>
+            </TableView>
+         </center>
+         <bottom>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="640.0" spacing="25.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button id="button1" mnemonicParsing="false" text="Add" fx:id="btnAddAppt" onAction="#handleBtnAddAppt"/>
+                  <Button id="button1" mnemonicParsing="false" style="-fx-pref-width: 100;" text="Modify"  fx:id="btnModAppt" onAction="#handleBtnModAppt"/>
+                  <Button id="button1" mnemonicParsing="false" text="Delete"  fx:id="btnDelAppt" onAction="#handleBtnDelAppt"/>
+               </children>
+            </HBox>
+         </bottom>
+         <top>
+            <VBox prefHeight="65.0" prefWidth="660.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label id="label1" alignment="CENTER" prefHeight="32.0" prefWidth="640.0" text="Appointments" />
+                  <HBox alignment="CENTER_RIGHT" prefHeight="52.0" prefWidth="640.0" spacing="25.0">
+                     <children>
+                         <fx:define>
+                             <ToggleGroup fx:id="group"/>
+                         </fx:define>                         
+                        <RadioButton mnemonicParsing="false" text="All" fx:id="btnAll" toggleGroup="$group" onAction="#handleBtnAll" />
+                        <RadioButton mnemonicParsing="false" text="This Month" fx:id="btnMonth" toggleGroup="$group" onAction="#handleBtnMonth" />
+                        <RadioButton mnemonicParsing="false" text="This Week" fx:id="btnWeek" toggleGroup="$group" onAction="#handleBtnWeek"/>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </VBox>
+         </top>
+      </BorderPane>
+   </center>
+   <top>
+      <AnchorPane prefHeight="64.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label id="label0" alignment="CENTER" contentDisplay="CENTER" layoutY="16.0" prefHeight="32.0" prefWidth="1280.0" text="Hello User"  fx:id="lblTitle" />
+         </children>
+      </AnchorPane>
+   </top>
+   <bottom>
+      <VBox prefHeight="128.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label id="label1" alignment="CENTER" prefHeight="46.0" prefWidth="1280.0" text="Generate Reports" />
+            <HBox alignment="CENTER" prefHeight="93.0" prefWidth="1280.0" spacing="25.0">
+               <children>
+                  <Button id="button1" mnemonicParsing="false" prefWidth="300.0" style="-fx-pref-width: 300;" text="Appointment Types By Month" onAction="#handleReport1"/>
+                  <Button id="button1" mnemonicParsing="false" style="-fx-pref-width: 300;" text="All User Schedules" onAction="#handleReport2" />
+                  <Button id="button1" mnemonicParsing="false" style="-fx-pref-width: 300;" text="User Appointment Counts" onAction="#handleReport3"/>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </bottom>
+</BorderPane>
