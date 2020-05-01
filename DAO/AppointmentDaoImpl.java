@@ -257,5 +257,17 @@ public class AppointmentDaoImpl {
         return false;
     }
     
+    public boolean readAppointmentsGroupByUser(){
+        String query = "SELECT COUNT(appointmentId), userId FROM appointment GROUP BY userId";
+        try{
+            PreparedStatement ps =DBQuery.getPS(query);
+            ResultSet rs = ps.executeQuery();
+            System.out.println(rs);
+        } catch(SQLException e){
+            SQLAlerts.sqlReadError(query);
+        }
+        return false;
+    }
+    
     
 }
