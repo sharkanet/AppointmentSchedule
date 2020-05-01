@@ -7,12 +7,14 @@ package c195appointmentschedule.views;
 
 import c195appointmentschedule.DAO.AppointmentDaoImpl;
 import c195appointmentschedule.DAO.CustomerDaoImpl;
+import c195appointmentschedule.DAO.UserDaoImpl;
 import c195appointmentschedule.alerts.SQLAlerts;
 import c195appointmentschedule.model.Address;
 import c195appointmentschedule.model.Appointment;
 import c195appointmentschedule.model.Customer;
 import java.io.IOException;
 import java.net.URL;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -30,6 +32,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -76,6 +79,8 @@ public class MainScreenV2Controller implements Initializable {
     private RadioButton btnWeek;
     @FXML
     private RadioButton btnMonth;
+    @FXML
+    private Label lblTitle;
     
     private ObservableList<Appointment> allUserAppts;
     ObservableList<Appointment> weekAppts = FXCollections.observableArrayList();
@@ -202,11 +207,57 @@ public class MainScreenV2Controller implements Initializable {
     @FXML
     private void handleBtnWeek(){
         rbSelected = rbOption.WEEK;
-        ObservableList<Appointment> weekAppts;
+  //      ObservableList<Appointment> weekAppts;
+        LocalDate todayDate = LocalDate.now();
+        DayOfWeek todayDay = todayDate.getDayOfWeek();
+        LocalDate startOfWeek = LocalDate.now(); // week starts sunday 
+        LocalDate endOfWeek = LocalDate.now();   // week ends saturday
+        switch(todayDay){
+            case SUNDAY:
+                startOfWeek = todayDate;
+                endOfWeek = todayDate.plusDays(6);
+                //System.out.println(startOfWeek +"\t" + endOfWeek);
+                break;
+            case MONDAY:
+                startOfWeek = todayDate.minusDays(1);
+                endOfWeek = todayDate.plusDays(5);
+               // System.out.println(startOfWeek +"\t" + endOfWeek);
+                break;
+            case TUESDAY:
+                startOfWeek = todayDate.minusDays(2);
+                endOfWeek = todayDate.plusDays(4);
+                //System.out.println(startOfWeek +"\t" + endOfWeek);
+                break;
+            case WEDNESDAY:
+                startOfWeek = todayDate.minusDays(3);
+                endOfWeek = todayDate.plusDays(3);
+               // System.out.println(startOfWeek +"\t" + endOfWeek);
+                break;
+            case THURSDAY:
+                startOfWeek = todayDate.minusDays(4);
+                endOfWeek = todayDate.plusDays(2);
+               // System.out.println(startOfWeek +"\t" + endOfWeek);
+                break;
+            case FRIDAY:
+                startOfWeek = todayDate.minusDays(5);
+                endOfWeek = todayDate.plusDays(1);
+               // System.out.println(startOfWeek +"\t" + endOfWeek);
+                break;
+            case SATURDAY:
+                startOfWeek = todayDate.minusDays(6);
+                endOfWeek = todayDate;
+               // System.out.println(startOfWeek +"\t" + endOfWeek);
+                break;            
+        }
+        weekAppts.clear();
         for(Appointment appt: allUserAppts){
             // find week's appointments
+            LocalDate apptDay = appt.getStart().toLocalDate();
+            if( apptDay.equals(startOfWeek)|| apptDay.equals(endOfWeek) || (apptDay.isAfter(startOfWeek) && apptDay.isBefore(endOfWeek))){
+                weekAppts.add(appt);
+            }
         }
-        System.out.println("btn");
+        tblAppt.setItems(weekAppts);
     }
     @FXML
     private void handleBtnMonth(){
@@ -224,11 +275,12 @@ public class MainScreenV2Controller implements Initializable {
     
      @FXML
     private void handleReport1(){
-        System.out.println("btn");
+        System.out.println("btn");        
     }
     @FXML
     private void handleReport2(){
-        System.out.println("btn");
+        
+        AppointmentDaoImpl.getAppointmentDaoImpl().readAppointmentsGroupByUser();
     }
     @FXML
     private void handleReport3(){
@@ -253,6 +305,7 @@ public class MainScreenV2Controller implements Initializable {
         allUserAppts = AppointmentDaoImpl.getAppointmentDaoImpl().getUserAppointments();
         tblAppt.setItems(allUserAppts);   
         
+        lblTitle.setText("Hello " + UserDaoImpl.getUserDaoImpl().getCurrentUser().getUserName());
         rbSelected = rbOption.ALL;
         btnAll.setSelected(true);
         

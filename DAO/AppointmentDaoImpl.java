@@ -7,6 +7,8 @@ package c195appointmentschedule.DAO;
 
 import c195appointmentschedule.alerts.SQLAlerts;
 import c195appointmentschedule.model.Appointment;
+import c195appointmentschedule.model.Customer;
+import c195appointmentschedule.model.User;
 import c195appointmentschedule.utility.DBQuery;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,8 +17,11 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
+import javafx.stage.StageStyle;
 
 /**
  *
@@ -140,7 +145,7 @@ public class AppointmentDaoImpl {
     // user's appointments
     public void readUserAppointments(){
         String query;
-        query = "SELECT * FROM appointment WHERE userId=?";
+        query = "SELECT * FROM appointment WHERE userId=? ORDER BY start";
         
         try{
             DBQuery.setPStatement(query);
@@ -206,7 +211,7 @@ public class AppointmentDaoImpl {
             readUserAppointments();
             return true;
         }catch(SQLException e){
-            e.printStackTrace();            
+         //   e.printStackTrace();            
             SQLAlerts.sqlAddError("appointment");
         }
         return false;
@@ -236,7 +241,7 @@ public class AppointmentDaoImpl {
             return true;
         } catch (SQLException e){
             SQLAlerts.sqlUpdateError("appointment");
-            e.printStackTrace();
+           // e.printStackTrace();
         }
         return false;
     }
@@ -258,11 +263,21 @@ public class AppointmentDaoImpl {
     }
     
     public boolean readAppointmentsGroupByUser(){
-        String query = "SELECT COUNT(appointmentId), userId FROM appointment GROUP BY userId";
+        String query = "SELECT COUNT(appointmentId), userId FROM appointment GROUP BY userId ORDER BY start";
         try{
             PreparedStatement ps =DBQuery.getPS(query);
             ResultSet rs = ps.executeQuery();
-            System.out.println(rs);
+            Map<Integer,User> userMap =UserDaoImpl.getUserDaoImpl().getUserMap();
+            StringBuilder sb = new StringBuilder();
+            while(rs.next()){
+                sb.append(userMap.get(rs.getInt("userId"))).append(" has ").append(rs.getInt("COUNT(appointmentId)")).append(" appointments on record").append(System.getProperty("line.separator"));  
+            }
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.initStyle(StageStyle.UTILITY);
+            alert.setTitle("REPORT");
+            alert.setHeaderText("Appointments By User");
+            alert.setContentText(sb.toString());        
+            alert.showAndWait();
         } catch(SQLException e){
             SQLAlerts.sqlReadError(query);
         }
