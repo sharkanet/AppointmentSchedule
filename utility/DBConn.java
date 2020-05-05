@@ -6,8 +6,10 @@
 package c195appointmentschedule.utility;
 
 
+import static c195appointmentschedule.alerts.SQLAlerts.sqlConnectionError;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -24,11 +26,11 @@ public class DBConn {
     
 
     
-    public static MysqlDataSource getMySqlDataSource(){
+    public static MysqlDataSource getMySqlDataSource() throws IOException{
         Properties props = new Properties();
         FileInputStream fis = null;
         MysqlDataSource mysqlDS = null;
-        try{
+//        try{
             fis = new FileInputStream("src/c195appointmentschedule/utility/db.properties");
             
             props.load(fis);
@@ -42,9 +44,9 @@ public class DBConn {
            
                     
             
-        }catch (IOException e){
-            e.printStackTrace();            
-        }
+//        }catch (IOException e){
+//            e.printStackTrace();            
+//        }
         return mysqlDS;        
     }
     
@@ -53,8 +55,10 @@ public class DBConn {
         try{
             conn = getMySqlDataSource().getConnection();            
             System.out.println("Connection Successful");
-        } catch (SQLException e){
+        } catch(IOException e){
             e.printStackTrace();
+        } catch (SQLException e){
+            sqlConnectionError();
         }        
         return conn;
     }

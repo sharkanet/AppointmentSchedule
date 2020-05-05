@@ -202,7 +202,7 @@ public class AppointmentDaoImpl {
             ps.setString(8, url);
         //    ZonedDateTime zdt = start.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"));
             Timestamp tsStart = Timestamp.valueOf(start.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());      
-            System.out.println(tsStart.toString());
+        //    System.out.println(tsStart.toString());
             Timestamp tsEnd = Timestamp.valueOf(end.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());           
             ps.setTimestamp(9, tsStart);            
             ps.setTimestamp(10, tsEnd);            

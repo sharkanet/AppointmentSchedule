@@ -222,7 +222,7 @@ public class MainScreenV2Controller implements Initializable {
     private void handleBtnAll(){
         rbSelected = rbOption.ALL;
         tblAppt.setItems(allUserAppts);  
-        System.out.println("btn");
+    //    System.out.println("btn");
     }
     @FXML
     private void handleBtnWeek(){
@@ -382,8 +382,8 @@ public class MainScreenV2Controller implements Initializable {
     private void handleBtnExit(){
          Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(("EXIT"));
-        alert.setHeaderText(("Exit_program"));
-        alert.setContentText(("Are_you_sure?"));       
+        alert.setHeaderText(("Exit program"));
+        alert.setContentText(("Are you sure?"));       
         ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText(("OK"));
         ((Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL)).setText(("Cancel"));
 
