@@ -43,4 +43,12 @@ public class SQLAlerts {
             alert.setContentText("Failed to delete " + s );
             alert.showAndWait();
     }
+     public static void sqlConnectionError(){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ERROR");
+            alert.setHeaderText("SQL Exception");
+            alert.setContentText("Failed to connect to database");
+            alert.showAndWait();
+    }
+     
 }

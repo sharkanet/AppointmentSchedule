@@ -175,7 +175,7 @@ public class LoginScreenController implements Initializable{
         this.users=u;
     }
     public void logLogin(String userName){
-        String logFile = "logins.txt";
+        String logFile = "src\\logs\\logins.txt";
 // try with for auto close        
         try(FileWriter outputFile = new FileWriter(logFile, true)){
             outputFile.append(userName +" logged in on " + LocalDate.now() + " at " + LocalTime.now() + "\n");

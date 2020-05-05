@@ -19,8 +19,8 @@
         </Label>
             <Label id="label1" fx:id="lblUser" layoutX="139.0" layoutY="144.0" prefHeight="68.0" prefWidth="118.0" text="User:" />
             <Label id="label1" fx:id="lblPw" layoutX="139.0" layoutY="229.0" prefHeight="68.0" prefWidth="118.0" text="Password:" />
-            <PasswordField fx:id="fdPw" layoutX="335.0" layoutY="250.0" prefHeight="25.0" prefWidth="194.0" text="pw" />
-            <TextField fx:id="fdUser" layoutX="335.0" layoutY="165.0" prefHeight="25.0" prefWidth="194.0" text="bob" />
+            <PasswordField fx:id="fdPw" layoutX="335.0" layoutY="250.0" prefHeight="25.0" prefWidth="194.0" text="" />
+            <TextField fx:id="fdUser" layoutX="335.0" layoutY="165.0" prefHeight="25.0" prefWidth="194.0" text="" />
             <Button fx:id="btnLogin" layoutX="294.0" layoutY="337.0" mnemonicParsing="false" onAction="#toMain" text="Login" />
             <Button fx:id="btnExit" layoutX="468.0" layoutY="337.0" mnemonicParsing="false" onAction="#exit" text="Exit" />
       </children>
